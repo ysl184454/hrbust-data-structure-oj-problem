@@ -1,0 +1,460 @@
+
+1.顺序表-------------------------------------
+#include<iostream>
+using namespace std;
+#define MaxSize 10
+typedef struct {
+	int data[MaxSize];
+	int length;
+}SqList;
+
+void InitList(SqList &L) {
+	L.length = 0;
+	int n,c;
+	cout << "请输入顺序表元素的个数:" << endl;
+	cin >> n;
+	cout << "请输入顺序各元素的值，以空格为间隔:" << endl;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> c;char x = getchar();
+		if (x == '/n')
+			break;
+		L.data[i] = c;
+		L.length++;
+		//cout << L.data[i] << '\n';
+	}
+}
+void Print(SqList L)
+{
+	
+	int i;
+	
+	for (i = 0; i < L.length; i++)
+	{
+		cout << L.data[i] << " ";
+	}
+cout << endl;
+}
+
+
+bool ListDelete(SqList& L, int i)
+{
+	if (i<1 || i>L.length + 1)
+		return false;
+	
+	
+
+	for (int j = i; j <L.length; j++)
+	{
+		L.data[j-1] = L.data[j];
+	}
+	
+	L.length--;
+	return true;
+
+}
+
+int main()
+{
+	SqList L;
+	InitList(L);
+	int data[MaxSize];
+	
+	for (int i = 0; i < L.length; i++)
+	{
+		if (L.data[i] == L.data[i + 1])
+		{
+			ListDelete(L, i);
+		}
+	}
+	
+
+	Print(L);
+}
+
+
+1.链表--------------------------------
+#include<iostream>  
+using namespace std;
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node, * LinkedList;
+
+Node* InitList(LinkedList& L) {
+    L = new Node;
+    L->next = NULL;
+    int n, c;
+    cout << "请输入链表元素的个数:" << endl;
+    cin >> n;
+    Node* p = L;
+    for (int i = 0; i < n; i++) {
+        cin >> c;
+        Node* newNode = new Node;
+        newNode->data = c;
+        newNode->next = NULL;
+        p->next = newNode;
+        p = newNode;
+    }
+    return L;
+}
+
+void Print(LinkedList L) {
+    Node* p = L->next;
+    while (p != NULL) {
+        cout << p->data << " ";
+        p = p->next;
+    }
+    cout << endl;
+}
+
+bool ListDelete(LinkedList& L, int i) {
+    Node* p = L, * q = NULL;
+    int j = 0;
+    while (p != NULL && j < i - 1) {
+        q = p;
+        p = p->next;
+        j++;
+    }
+    if (p == NULL || j > i - 1) {
+        return false;
+    }
+    q->next = p->next;
+    delete p;
+    return true;
+}
+int main() {
+    LinkedList L;
+    InitList(L);
+    int data[100];
+    Node* p = L->next;
+    while (p != NULL) {
+        if (p->data == p->next->data) {
+            ListDelete(L, 2); // 删除重复元素，这里假设删除的是第二个元素，可以根据需要调整  
+        }
+        else {
+            p = p->next;
+        }
+    }
+    Print(L);
+}
+
+
+2.-----------------------------------
+顺序表：
+#include <iostream>  
+using namespace std;
+
+const int MAXSIZE = 100;
+
+struct Node {
+    int data[MAXSIZE];
+    int length;
+};
+
+void createList(Node& list) {
+    int j;
+    list.length = 0;
+    while (true) {
+        cin >> j;
+        if (j == -1) {
+            break;
+        }
+        if (list.length >= MAXSIZE) {
+            cout << "Error: List is full!" << endl;
+            break;
+        }
+        list.data[list.length++] = j;
+    }
+}
+
+Node compareList(Node& list1, Node& list2) {
+    Node temp;
+    temp.length = 0;
+    int i = 0, j = 0;
+    while (i < list1.length && j < list2.length) {
+        if (list1.data[i] <= list2.data[j]) {
+            temp.data[temp.length++] = list1.data[i++];
+        }
+        else {
+            temp.data[temp.length++] = list2.data[j++];
+        }
+    }
+    while (i < list1.length) {
+        temp.data[temp.length++] = list1.data[i++];
+    }
+    while (j < list2.length) {
+        temp.data[temp.length++] = list2.data[j++];
+    }
+    return temp;
+}
+
+int main() {
+    Node list1, list2, merged;
+    createList(list1);
+    createList(list2);
+    merged = compareList(list1, list2);
+    for (int i = 0; i < merged.length; i++) {
+        cout << merged.data[i] << " ";
+    }
+    cout << endl;
+    return 0;
+}
+
+
+------------------------------------------------------------------
+2.链表：
+#include <iostream>  
+using namespace std;
+struct ListNode {
+	int val;
+	ListNode* next;
+	 
+};
+
+void createList(ListNode* l) {
+	ListNode* p;
+	ListNode* r;
+	int i = 1;
+	int j;
+	r = l;
+	while (i != 0) {
+		scanf_s("%d", &j);
+		if (j != -1) {
+			if (i == 1)
+			{
+				ListNode* q = new ListNode();
+				q->val = j;
+				l->val = q->val;
+			}
+			else {
+			p = new ListNode();
+			p->val = j;
+			r->next = p;
+			r = p;
+			}
+			
+			}
+		else
+		{
+			i = -1;
+			r->next = NULL; 
+		}
+		i++;
+	}
+}
+
+ListNode* CompareList(ListNode* l1, ListNode* l2) { 
+	ListNode* head = new ListNode();
+	head->next = NULL;
+	ListNode* cur = head;
+
+	while (l1 && l2) {
+		if (l1->val <= l2->val) {
+			cur->next = l1;
+			l1 = l1->next;
+		}
+		else {
+			cur->next = l2;
+			l2 = l2->next;
+		}
+		cur = cur->next;
+	}
+	cur->next = l1 ? l1 : l2; 
+	return head->next;
+}
+
+int main() {
+	ListNode* l1 = new ListNode();
+
+	ListNode* l2 = new ListNode();
+	createList(l1);
+	createList(l2);
+	ListNode* com = CompareList(l1, l2);
+	while (com) {
+		cout << com->val << " ";
+		com = com->next;
+	}
+	cout << endl;
+
+	return 0;
+}
+
+3.顺序表--------------------------
+#include <iostream>  
+using namespace std;
+
+const int MAX_SIZE = 100; // 定义顺序表的最大长度  
+
+ struct Node{
+    int data[MAX_SIZE]; // 存储元素的数组  
+    int length; // 当前长度  
+};
+
+
+void InitList(struct Node* L) {
+    L->length = 0;
+    int n, c;
+    cout << "请输入顺序表元素的个数:" << endl;
+    cin >> n;
+    cout << "请输入顺序各元素的值，以空格为间隔:" << endl;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> c; 
+        L->data[i] = c;
+        L->length++;
+    }
+}
+void deleteCommonElements(Node* A, Node* B, Node* C) {
+    int i = 0, j = 0, k = 0;
+    while (i < A->length && j < B->length && k < C->length) {
+        if (A->data[i] == B->data[j] && A->data[i] == C->data[k]) {
+            for (int m = i; m < A->length - 1; m++) {
+                A->data[m] = A->data[m + 1];
+            }
+            A->length--;
+            j++;
+            k++;
+        }
+        else if (A->data[i] < B->data[j]) {
+            i++;
+        }
+        else if (A->data[i] > B->data[j]) {
+            j++;
+        }
+        else {
+            k++;
+        }
+    }
+}
+
+void printList(Node* list) {
+    for (int i = 0; i < list->length; i++) {
+        cout << list->data[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    Node* A = new Node();
+    Node* B = new Node();
+    Node* C = new Node();
+    InitList(A);
+    InitList(B);
+    InitList(C);
+    deleteCommonElements(A, B, C);
+    printList(A); // 输出结果为：1 3 5  
+    return 0;
+}
+
+3.链表------------------------------
+#include <iostream>  
+using namespace std;
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+Node* insertNode(Node* head, int data) {
+    Node* newNode = new Node;
+    newNode->data = data;
+    newNode->next = NULL;
+    if (head == NULL || head->data >= newNode->data) {
+        newNode->next = head;
+        head = newNode;
+    }
+    else {
+        Node* current = head;
+        while (current->next != NULL && current->next->data < newNode->data) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
+    }
+    return head;
+}
+
+Node* DeleteList(Node* head, int x) {
+    Node* p = head, * pre = NULL;
+    while (p != NULL) {
+        if (p->data == x) {
+            if (pre == NULL) { 
+                Node* q = p;
+                head = p->next;
+                delete q;
+                break;
+            }
+            else { 
+                Node* q = p;
+                pre->next = p->next;
+                delete q;
+                p = pre->next;
+            }
+        }
+        else {
+            pre = p;
+            p = p->next;
+        }
+    }
+    return head;
+}
+
+bool findInList(Node* head, int data) {
+    while (head != NULL) {
+        if (head->data == data) {
+            return true;
+        }
+        head = head->next;
+    }
+    return false;
+}
+
+void Print(Node* head) {
+    Node* p = head;
+    while (p) {
+        cout << p->data << " ";
+        p = p->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    Node* A = NULL, * B = NULL, * C = NULL,*D=NULL;
+    int c;
+    while (cin >> c) {
+        if (c != -1) {
+            A = insertNode(A, c);
+        }
+        else {
+            break; 
+        }
+    }
+    while (cin >> c) {
+        if (c != -1) {
+            B = insertNode(B, c);
+        }
+        else {
+            break; 
+        }
+    }
+    while (cin >> c) {
+        if (c != -1) {
+            C = insertNode(C, c);
+        }
+        else {
+            break; 
+        }
+    }
+    Node* temp = A;
+    while (temp != NULL) {
+        if (findInList(B, temp->data) && findInList(C, temp->data)) {
+            
+           DeleteList(A, temp->data); // 删除在B和C中都出现的元素  
+           temp = A->next;
+        }
+        else {
+            temp = temp->next; 
+    }
+    Print(A);
+    return 0;
+}
